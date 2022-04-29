@@ -25,7 +25,7 @@ public class ColorGrid {
         this.random = random;
         this.arrayList = new ArrayList<>();
         //System.out.println("object Created ");
-        WinningNeron();
+
 
     }
 
@@ -81,7 +81,18 @@ public class ColorGrid {
         );
     }
 
-    void  WinningNeron( ){
+    /*
+    * for ( int i=0;i<epic;i++){
+    * raduis=raduis*Math.exp()
+    * }
+    *
+    *
+    *
+    * */
+
+
+
+    void  solve( ){
 
         for(int i = 0; i < this.arrayList.size(); i++){
             bestMatchingUnit( arrayList.get(i) );
@@ -125,18 +136,18 @@ public class ColorGrid {
             for (int j=0;j<y;j++) {
             if((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos)<=radius*radius) ///(x - xCenter)*(x - xCenter) + (y - yCenter)*(y - yCenter) <= r*r
             {
-                double   red=  (inputColor.getRed()-this.colors[i][j].getRed())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos));
-                double blue= (inputColor.getBlue()-this.colors[i][j].getBlue())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos));
-                double green= (inputColor.getGreen()-this.colors[i][j].getGreen())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos));
-                Color c =Color.rgb((int)red,(int)green,(int)blue);
+                int    red= (int) ((int ) (inputColor.getRed()-this.colors[i][j].getRed())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos)));
+                int  blue= (int) ((int )(inputColor.getBlue()-this.colors[i][j].getBlue())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos)));
+                int  green= (int) ((int)(inputColor.getGreen()-this.colors[i][j].getGreen())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos)));
+                Color c = Color.rgb(Math.abs(red),Math.abs(green),Math.abs(blue));
+                System.out.print(red);
 
-                red=colors[i][j].getRed()+c.getRed();
-                green=colors[i][j].getGreen()+c.getGreen();
-                blue=colors[i][j].getBlue()+c.getBlue();
+                red= (int) (colors[i][j].getRed()+c.getRed());
+                green= (int) (colors[i][j].getGreen()+c.getGreen());
+                blue= (int) (colors[i][j].getBlue()+c.getBlue());
 
-                c=Color.rgb((int)red,(int)green,(int)blue);
+                c=Color.rgb((int)Math.abs(red),(int)Math.abs(green),(int)Math.abs(blue));
                 colors[i][j]=c;
-
             }
 
 
@@ -152,6 +163,8 @@ public class ColorGrid {
         return  Math.exp(-(Math.pow(d,2)/(2*Math.pow(radius,2))));
 
     }
+
+
 
 
 

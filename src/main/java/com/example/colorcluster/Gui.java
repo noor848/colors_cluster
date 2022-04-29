@@ -1,5 +1,6 @@
 package com.example.colorcluster;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -14,6 +15,8 @@ import javafx.scene.text.Text;
 
 public class Gui {
 
+    public Button start;
+    public TextField epic;
     ColorGrid grid;
     int input;
     Alert warningAlert;
@@ -170,7 +173,15 @@ public class Gui {
     }
 
 
+    public void findSolution(ActionEvent actionEvent) {
 
+        grid.solve();
+        for (int i = 0; i < grid.x; i++)
+            for (int j = 0; j < grid.y; j++)
+                pane.add(new Circle(0, 0, 4, grid.colors[i][j]), j, i); // c
+
+
+    }
 }
 
 
