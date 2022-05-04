@@ -1,8 +1,10 @@
 package com.example.colorcluster;
 
 import javafx.scene.paint.Color;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class ColorGrid {
@@ -13,9 +15,9 @@ public class ColorGrid {
     float learnRate;
     ArrayList<Color> arrayList;
     Random random;
-    int x,y,x_pos,y_pos;
-    Color minColor;
-    double minDist;
+    int x;
+    int y;
+
 
     ColorGrid() {
         this(new Random(), new ArrayList<>());
@@ -24,9 +26,6 @@ public class ColorGrid {
     ColorGrid(Random random) {
         this.random = random;
         this.arrayList = new ArrayList<>();
-        //System.out.println("object Created ");
-
-
     }
 
     ColorGrid(Random random, ArrayList<Color> arrayList) {
@@ -36,25 +35,7 @@ public class ColorGrid {
 
     }
 
-//    void solve() {
-//        for (Color color : arrayList) {
-//            for (int i = 0; i < colors.length; i++) {
-//                for (int j = 0; j < colors[0].length; j++) {
-//                    ///bestMatchingUnit();
-//                }
-//            }
-//
-//
-//
-//
-//
-//            for (int i = 0; i < colors.length; i++) {
-//                for (int j = 0; j < colors[0].length; j++) {
-//                    //* change best match radius
-//                }
-//            }
-//        }
-//    }
+
 
     void fillGrid(int x, int y) {
         colors = new Color[x][y];
@@ -80,88 +61,63 @@ public class ColorGrid {
                 )
         );
     }
-
-    /*
-    * for ( int i=0;i<epic;i++){
-    * raduis=raduis*Math.exp()
-    * }
-    *
-    *
-    *
-    * */
-
-
-
     void  solve( ){
-
-        for(int i = 0; i < this.arrayList.size(); i++){
-            bestMatchingUnit( arrayList.get(i) );
-            update(arrayList.get(i));
+        boolean changing=true;
+        // TODO:epoch or stops changing
+        while(changing) {
+            for (Color color : this.arrayList) {
+                Pair<Integer, Integer> bmu = bestMatchingUnit(color);
+                changing=update(color, bmu);
+            }
         }
-
     }
 
 
-    void  bestMatchingUnit(Color inputColor ){
-
-        int red= (int) (this.colors[0][0].getRed()-inputColor.getRed());
-        int blue= (int) (this.colors[0][0].getBlue()-inputColor.getBlue());
-        int green= (int) (this.colors[0][0].getGreen()-inputColor.getGreen());
-        minDist=Math.sqrt(red+blue+green);
+    Pair<Integer,Integer> bestMatchingUnit(Color inputColor){
+        double minDist;
+        minDist=Double.MAX_VALUE;
+        double red;
+        double blue;
+        double green;
         double distance;
+        Pair<Integer,Integer> pos=null;
         for (int i=1;i<x;i++){
             for (int j=1;j<y;j++){
-               red= (int) (this.colors[i][j].getRed()-inputColor.getRed());
-                 blue= (int) (this.colors[i][j].getBlue()-inputColor.getBlue());
-                 green= (int) (this.colors[i][j].getGreen()-inputColor.getGreen());
-                 distance=Math.sqrt(red+blue+green);
-                 if(minDist>distance) {
-                     minDist = distance;
-                     minColor=this.colors[i][j];
-                     x_pos=i;
-                     y_pos=j;
-                 }
-
+                red= this.colors[i][j].getRed()-inputColor.getRed();
+                blue= this.colors[i][j].getBlue()-inputColor.getBlue();
+                green= this.colors[i][j].getGreen()-inputColor.getGreen();
+                distance=Math.sqrt(red+blue+green);
+                if(minDist>distance) {
+                    minDist = distance;
+                    pos=new Pair<>(i,j);
+                }
             }
-
-
         }
-
-
+        return pos;
     }
-
-    void update(Color inputColor){
-
+    boolean update(Color inputColor,Pair<Integer,Integer> pos){
+        boolean change=false;
         for (int i=0;i<x;i++){
             for (int j=0;j<y;j++) {
-            if((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos)<=radius*radius) ///(x - xCenter)*(x - xCenter) + (y - yCenter)*(y - yCenter) <= r*r
-            {
-                int    red= (int) ((int ) (inputColor.getRed()-this.colors[i][j].getRed())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos)));
-                int  blue= (int) ((int )(inputColor.getBlue()-this.colors[i][j].getBlue())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos)));
-                int  green= (int) ((int)(inputColor.getGreen()-this.colors[i][j].getGreen())*learnRate*weight((i-x_pos)*(i-x_pos)+(j - y_pos)*(j - y_pos)));
-                Color c = Color.rgb(Math.abs(red),Math.abs(green),Math.abs(blue));
-                System.out.print(red);
+                int distance = (i - pos.getKey()) * (i - pos.getKey()) + (j - pos.getValue()) * (j - pos.getValue());//pos
+                if(distance <=radius*radius){
+                    double learnAndW=learnRate*weight(distance);
+                    double red=colors[i][j].getRed()+learnAndW*(inputColor.getRed()-colors[i][j].getRed());
+                    double green=colors[i][j].getGreen()+learnAndW*(inputColor.getGreen()-colors[i][j].getGreen());
+                    double blue=colors[i][j].getBlue()+learnAndW*(inputColor.getBlue()-colors[i][j].getBlue());
+                    Color nColor=Color.color(red,green,blue);
+                    change= change || !Objects.equals(nColor, colors[i][j]);
+                    colors[i][j]=Color.color(red,green,blue);
 
-                red= (int) (colors[i][j].getRed()+c.getRed());
-                green= (int) (colors[i][j].getGreen()+c.getGreen());
-                blue= (int) (colors[i][j].getBlue()+c.getBlue());
-
-                c=Color.rgb((int)Math.abs(red),(int)Math.abs(green),(int)Math.abs(blue));
-                colors[i][j]=c;
-            }
-
-
+                }
             }
         }
-
-
-
+        return change;
     }
 
 
-    double weight(float d ){
-        return  Math.exp(-(Math.pow(d,2)/(2*Math.pow(radius,2))));
-
+    double weight(double d ){
+        return  Math.exp(-(d/(2*Math.pow(radius,2))));
     }
 
 
