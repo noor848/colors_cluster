@@ -17,6 +17,7 @@ public class ColorGrid {
     Random random;
     int x;
     int y;
+    int epic ;
 
 
     ColorGrid() {
@@ -63,14 +64,17 @@ public class ColorGrid {
     }
     void  solve( ){
         boolean changing=true;
+        System.out.println("epic is "+this.epic);
         // TODO:epoch or stops changing
+//// && this.epic !=0
         while(changing) {
             for (Color color : this.arrayList) {
                 Pair<Integer, Integer> bmu = bestMatchingUnit(color);
                 changing=update(color, bmu);
             }
-        }
-    }
+     ///  epic--;
+
+    }}
 
 
     Pair<Integer,Integer> bestMatchingUnit(Color inputColor){

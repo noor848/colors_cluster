@@ -144,19 +144,25 @@ public class Gui {
     private void learnRadius() {
         if (!learnR.getText().isBlank() && !radius.getText().isBlank()) {
 
-            if (Integer.parseInt(radius.getText()) != 0) {
-
-                grid.learnRate = Float.parseFloat(learnR.getText());
+            if (Integer.parseInt(radius.getText()) != 0 ) {
+                grid.epic = Integer.parseInt(epic.getText());
                 grid.radius = Integer.parseInt(radius.getText());
+                if (Float.parseFloat(learnR.getText())>= 0 && Float.parseFloat(learnR.getText())<=1) {
+                    grid.learnRate = Float.parseFloat(learnR.getText());
 
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Alert");
-                alert.setHeaderText("Added  ");
-                alert.showAndWait();
-                learnRadius.setDisable(true);
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Alert");
+                    alert.setHeaderText("Added  ");
+                    alert.showAndWait();
+                    learnRadius.setDisable(true);
+                }else {
+                    warningAlert.setHeaderText("Range should be btw 0 and 1");
+                    warningAlert.showAndWait();
 
+
+                }
             } else {
-                warningAlert.setHeaderText("Radius can't be zero ");
+                warningAlert.setHeaderText("check Radius input ");
                 warningAlert.showAndWait();
 
 
