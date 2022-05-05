@@ -67,14 +67,33 @@ public class ColorGrid {
         System.out.println("epic is "+this.epic);
         // TODO:epoch or stops changing
 //// && this.epic !=0
-        while(changing) {
-            for (Color color : this.arrayList) {
-                Pair<Integer, Integer> bmu = bestMatchingUnit(color);
-                changing=update(color, bmu);
-            }
-     ///  epic--;
 
-    }}
+        int count =0;
+        if(this.epic!=0) {
+            while (this.epic != 0) {
+                for (Color color : this.arrayList) {
+                    Pair<Integer, Integer> bmu = bestMatchingUnit(color);
+                    changing = update(color, bmu);
+                }
+                epic--;
+
+            }
+        }
+        else{
+            while(changing) {
+                if (count>100000)
+                    break;
+               System.out.println(count++);
+                for (Color color : this.arrayList) {
+                    Pair<Integer, Integer> bmu = bestMatchingUnit(color);
+                    changing=update(color, bmu);
+                }
+
+            }
+
+        }
+
+    }
 
 
     Pair<Integer,Integer> bestMatchingUnit(Color inputColor){

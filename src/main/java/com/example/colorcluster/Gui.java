@@ -145,7 +145,7 @@ public class Gui {
         if (!learnR.getText().isBlank() && !radius.getText().isBlank()) {
 
             if (Integer.parseInt(radius.getText()) != 0 ) {
-                grid.epic = Integer.parseInt(epic.getText());
+                grid.epic = !epic.getText().isEmpty()?Integer.parseInt(epic.getText()):0;
                 grid.radius = Integer.parseInt(radius.getText());
                 if (Float.parseFloat(learnR.getText())>= 0 && Float.parseFloat(learnR.getText())<=1) {
                     grid.learnRate = Float.parseFloat(learnR.getText());
